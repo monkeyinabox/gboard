@@ -1,0 +1,20 @@
+{# lupon/templates/login.html #}
+
+{% extends "base.html" %}
+
+{% block content %}
+<form class="form-signin" id="login" action="{{ url_for('login') }}" method="POST">
+    {{ form.csrf_token }}
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <label for="email" class="sr-only">Email address</label>
+    {{ form.email(class="form-control", placeholder="eMail address") }}
+    <label for="password" class="sr-only">Password</label>
+    {{ form.password(class="form-control", placeholder="Password") }}
+    <div class="checkbox">
+        <label>
+        <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+    <button class="btn btn-block btn-secondary" type="submit">Sign in</button>
+</form>
+{% endblock %}

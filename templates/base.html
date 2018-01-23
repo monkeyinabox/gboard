@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default("en") }}">
+<head>
+  <meta charset="utf-8">
+  <meta content="initial-scale=1.0" name="viewport">
+  <!-- TBD link rel="shortcut icon" href="/static/favicon.png"-->
+
+  <title>LuponCRM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome/css/font-awesome.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!--Order matters-->
+  
+  <script src="{{ url_for('static', filename='js/popper.js') }}"></script> <!--Requiered for boostrap dropdown-->
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/code.js') }}"></script>
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+</head>
+<body>
+
+   {% include "nav.html" %}
+
+  <div class="container-fluid">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissable" id="message">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {# Body #}
+    {% block content %}{% endblock %}
+    
+  </div>
+</body>
+</html>

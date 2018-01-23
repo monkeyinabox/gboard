@@ -1,0 +1,36 @@
+{# Renders input field types with error messages #}
+
+{% macro inputField(field) %}
+<div class="form-group{% if field.errors %} is-invalid{% endif %} col-md-5 mb-3">  
+    <label for="event_{{ field.id }}" class="col-form-label">{{ field.label }}</label>
+	{% if field.errors %}
+        {{ field(class='form-control is-invalid') }}
+    {% else %}
+        {{ field(class='form-control') }}
+    {% endif %}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    {% endif %}  
+</div>
+{% endmacro %}
+
+
+{% macro simpleInputField(field) %}
+<div class="col-sm">
+    <div class="form{% if field.errors %} is-invalid{% endif %}">  
+        {% if field.errors %}
+            {{ field(class='form-control is-invalid') }}
+        {% else %}
+            {{ field(class='form-control') }}
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+
+{# Renders Action #}
+{% macro submitForm(field) %}
+    {{ field(class_="btn btn-primary") }}
+{% endmacro %}

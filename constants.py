@@ -1,0 +1,1 @@
+STRING_SIZE = 254
