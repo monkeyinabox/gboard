@@ -5,18 +5,8 @@ from .forms import LoginForm
 from .models import User
 from . import app
 
-from scapy.all import *
-import graphviz
-
-def update_map():
-    res,unans = traceroute(["www.microsoft.com","www.cisco.com","www.yahoo.com","www.wanadoo.fr","www.pacsec.com"],dport=[80,443],maxttl=20,retry=-2)
-    res.graph()
-    res.graph(type="ps",target="| lp")
-    res.graph(target="> static/images/graph.svg")
-
 @app.route('/', methods=['GET','POST'])
 def index():
-    update_map()
     return render_template("index.html")
 
 @app.route('/login', methods=["GET", "POST"])
@@ -39,7 +29,3 @@ def login():
             flash('Sorry, invalid login', 'danger')
 
     return render_template('user/login.html', form=form)
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('404.html'), 404

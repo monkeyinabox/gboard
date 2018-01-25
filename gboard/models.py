@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Table, DateTime
 from . import db
 
+from . import infrastructure
+
 from .constants import STRING_SIZE
 
 class User(db.Model, UserMixin):
