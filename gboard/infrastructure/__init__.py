@@ -1,6 +1,5 @@
-from .base import *
-from .domain import *
-from .rr import *
-from .server import *
+from .Domain import Domain
+from .ResourceRecord import *
+from .Server import Server
 
 

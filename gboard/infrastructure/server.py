@@ -2,16 +2,12 @@ from flask_login import UserMixin
 from flask_sqlalchemy import Model, SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Table, DateTime
-from sqlalchemy.utils import IPAddressType
-from . import db
+from sqlalchemy_utils import IPAddressType
+from gboard import db
 
-from wtforms_alchemy import ModelForm, ModelFieldList
-from wtforms.fields import FormField
+from gboard.constants import STRING_SIZE
 
-from ..constants import STRING_SIZE
-
-from domain import domain_server, DomainForm
-
+from gboard.infrastructure.Domain import domain_server
 
 class Server(db.Model):
    
@@ -34,8 +30,3 @@ class Server(db.Model):
     domains = relationship('Domain', secondary=domain_server, lazy='subquery',
         backref=db.backref('server', lazy=True))
 
-class ServerForm(ModelForm):
-    class Meta:
-        model = Server
-    
-    domains = ModelFieldList(FormField(DomainForm))

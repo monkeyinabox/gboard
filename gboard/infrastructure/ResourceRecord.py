@@ -2,12 +2,12 @@ from flask_login import UserMixin
 from flask_sqlalchemy import Model, SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Table, DateTime
-from sqlalchemy.util import IPAddressType
-from . import db
+from sqlalchemy_utils import IPAddressType
+from gboard import db
 
-from ..constants import STRING_SIZE
+from gboard.constants import STRING_SIZE
 
-class User(db.Model):
+class ResourceRecord(db.Model):
    
     __tablename__ = 'rr'
 
