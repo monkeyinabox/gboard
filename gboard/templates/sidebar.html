@@ -1,0 +1,20 @@
+<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+    
+    <form class="bd-search d-flex align-items-center">
+               <input type="search" class="form-control" id="search-input" placeholder="Filter..." aria-label="Search for..." autocomplete="off"><a id="add_button" class="btn btn-primary btn-lgt" href="{{ url_for('index') }}"><i class="fa fa-plus" aria-hidden="true"></i></a>
+        </form>
+    <ul class="nav nav-pills flex-column" id=filter_list>
+    {% for row in data %}  
+    {% if serverform is defined %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index', data_id=row.id) }}">{{ row.id|safe }}: {{ row.fqdn|safe }} </a>
+        </li>
+    {% endif %}
+    {% if domainform is defined %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('index', data_id=row.id) }}">{{ row.id|safe }}: {{ row.name|safe }} </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+</nav>

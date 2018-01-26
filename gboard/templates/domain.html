@@ -3,18 +3,16 @@
 {% block content %}
 <div class="row">
     {% include "sidebar.html" %}
-
-
-
     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
         {% include "sub_nav.html" %}
         <h1>Dashbaord</h1>
-        <form class="form-group" id="add_server" action="{{ url_for('index') }}" method="POST">
-            {{ serverform.csrf_token }}
+        <form class="form-group" id="add_server" action="{{ url_for('domain') }}" method="POST">
+            {{ domainform.csrf_token }}
             <div class="form-row">
-                {{ inputField(serverform.ip_address) }}
-                {{ inputField(serverform.fqdn) }}
-            <button class="btn btn-block btn-secondary" type="submit">Add Server</button>
+                {{ inputField(domainform.name) }}
+                {{ inputField(domainform.master) }}
+                {{ dump|safe }}
+            <button class="btn btn-block btn-secondary" type="submit">Add Domain</button>
         </form>
     </main>
 </div>

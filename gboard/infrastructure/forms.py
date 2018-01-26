@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory
 from gboard import db
 from gboard.infrastructure import Domain, Server
-
+from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms_alchemy import ModelFieldList
 from wtforms.fields import FormField
 
@@ -13,14 +13,13 @@ class ModelForm(BaseModelForm):
     def get_session(self):
         return db.session
 
-class DomainForm(ModelForm):
-    class Meta:
-        model = Domain
-
-    server = ModelFieldList(FormField(ServerForm))
 
 class ServerForm(ModelForm):
     class Meta:
         model = Server
-    
-    domains = ModelFieldList(FormField(DomainForm))
+
+class DomainForm(ModelForm):
+    class Meta:
+        model = Domain
+    master = QuerySelectField(label='Master', allow_blank=False)
+    servers = ModelFieldList(FormField(ServerForm))

@@ -1,0 +1,40 @@
+{% from "macros.html" import inputField, submitForm %}
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% include "sidebar.html" %}
+    
+    <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+        {% include "sub_nav.html" %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Owner</th>
+                    <th>Data</th>
+                    <th>TTL</th>
+                    <th>Type</th>
+                    <th>Domain</th>
+                    <th>Server</th>
+                    </tr>
+            </thead>
+            <tbody>
+                {% for row in data  %}
+                <tr>
+                <td><a href="{{ url_for('rr', id=row.id) }}">{{ row.id|safe }}</a></td>
+                <td>{{ row.owner|safe }}</td>
+                <td>{{ row.data|safe }}</td>
+                <td>{{ row.ttl|safe }}</td>
+                <td>{{ row.rr_type|safe }}</td>
+                <td>{{ row.domain.name|safe }}</td>
+                <td>{{ row.server.fqdn|safe }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</div>
+
+
+
+{% endblock %}

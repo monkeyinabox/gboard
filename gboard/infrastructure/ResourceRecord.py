@@ -19,16 +19,27 @@ class ResourceRecord(db.Model):
     data = Column(
         String(STRING_SIZE))
 
-    TTL = Column(
-        Integer)
+    ttl = Column(
+        String(STRING_SIZE))
 
     rr_type = Column(
         String(STRING_SIZE))
 
-    rr_raw = Column(
-        String(STRING_SIZE))
-
-    domain = Column(
-        String(STRING_SIZE),
-        ForeignKey('domain.name'), 
+    domain_id = Column(
+        Integer,
+        ForeignKey('domain.id'), 
         nullable=True)
+
+    server_id = Column(
+        Integer,
+        ForeignKey('server.id'), 
+        nullable=True)
+
+    server = relationship('Server')
+
+    def __init__(self, owner, data, ttl, rr_type, server_id):
+        self.owner = owner
+        self.data = data
+        self.ttl = ttl
+        self.rr_type = rr_type
+        self.server_id = server_id
