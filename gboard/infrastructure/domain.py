@@ -30,7 +30,7 @@ class Domain(db.Model):
     name = Column(
         String(STRING_SIZE),
         nullable=False,
-        unique=True
+        unique=False
     )
     master = Column(
             Integer, 
@@ -45,15 +45,35 @@ class Domain(db.Model):
     def master_ip(self):
         return Server.query.get(self.master).ip_address.__str__()
     
-    def axfr(self):
+    def axfr(self,snapshot_id):
         zone = dns.zone.from_xfr(dns.query.xfr(self.master_ip, self.name))
         
         for rdtype in ['A', 'AAAA', 'NS', 'CNAME', 'SRV', 'TXT', 'SOA']:
 
             for (name, ttl, rdata) in zone.iterate_rdatas(rdtype=rdtype):
                 rr = ResourceRecord(name.__str__(), rdata.__str__(), ttl.__str__(), rdtype, self.master)
-                self.rrs.append(rr)
+                if rr not in self.rrs:
+                    rr.snapshot_id=snapshot_id
+                    self.rrs.append(rr)
 
         db.session.commit()
 
-        return True
+        return zone
+
+    def compare(self, other):
+        missing = []
+
+        for i in self.rrs:
+            if i in other.rrs:
+                missing.append
+
+        return missing
+
+
+    def discover_ns(self):
+        zone = dns.zone.from_xfr(dns.query.xfr(self.master_ip, self.name))
+        for (name, ttl, rdata) in zone.iterate_rdatas(rdtype='NS'):
+            server = Server(ip_address=rdata.__str__(), fqdn=name.__str__()+"."+self.name)
+            db.session.add(server)
+
+        db.session.commit()

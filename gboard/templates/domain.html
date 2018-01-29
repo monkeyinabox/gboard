@@ -14,9 +14,13 @@
                 {{ dump|safe }}
             <button class="btn btn-block btn-secondary" type="submit">Add Domain</button>
         </form>
+
+        {% if domain_id is defined %}
+        <form class="form-group" id="axfr" action="{{ url_for('axfr', domain_id=domain_id) }}" method="POST">
+        <button class="btn btn-block btn-secondary" type="submit">Update</button>
+        </form>
+        {% endif %}
+
     </main>
 </div>
-
-
-
 {% endblock %}

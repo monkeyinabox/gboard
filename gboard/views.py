@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, login_user, current_user, logout_user
 
-from gboard.infrastructure.forms import ServerForm, DomainForm
+from gboard.infrastructure.forms import ServerForm, DomainForm, DomainSelectForm
 from gboard.infrastructure import Server, Domain, ResourceRecord
 from .forms import LoginForm
 from .models import User
@@ -11,13 +11,38 @@ from pprint import pprint
 
 import dns
 
+
+@app.route('/compare', methods=['GET','POST'])
+def compare():
+    form = DomainSelectForm()
+    form.left_domain.query = Domain.query.filter_by()
+    form.right_domain.query = Domain.query.filter_by()
+
+    if form.validate_on_submit():
+        left_domain = Domain.query.get(form.left_domain.data.id)
+        right_domain = Domain.query.get(form.right_domain.data.id)
+
+        left_soa = ResourceRecord.query.filter_by(rr_type='SOA', domain_id=left_domain.id).first().data
+        right_soa = ResourceRecord.query.filter_by(rr_type='SOA', domain_id=right_domain.id).first().data
+        
+        return render_template("compare.html",
+            form=form,
+            left_id=left_domain.id, 
+            right_id=right_domain.id,
+            left_soa=left_soa,
+            right_soa=right_soa)
+
+    return render_template("compare.html",
+            form=form)
+
+
 @app.route('/domain', methods=['GET','POST'])
 def domain():
     serverform = ServerForm()
     domainform = DomainForm()
     data = Domain.query.filter_by().all()
     domainform.master.query = Server.query.filter_by()
-    
+    domain_id=1
     
     if domainform.validate_on_submit():
         domain = Domain()
@@ -27,13 +52,14 @@ def domain():
         db.session.commit()
         flash('A confirmation email has been sent via email.', 'success')
 
-        domain.axfr()
-
+        # domain.axfr()
+        
         return redirect(url_for('index'))
 
     return render_template("domain.html",
             domainform=domainform,
-            data=data)
+            data=data,
+            domain_id=domain_id)
 
 @app.route('/rr', methods=['GET','POST'])
 def rr():
@@ -43,14 +69,11 @@ def rr():
     return render_template("resource_record.html",
             data=data)
 
-
-
-@app.route('/domain/query/<string:master>/<string:domain>')
-def axfr():
-    z = dns.zone.from_xfr(dns.query.xfr(domain.master.__str__(), domain.name))
-    pprint(z)
-
-
+@app.route('/domain/axfr/<int:domain_id>', methods=['GET' ,'POST'])
+def axfr(domain_id):
+    domain = Domain.query.get(domain_id)
+    domain.axfr()
+    return redirect(url_for('rr'))
 
 @app.route('/', methods=['GET','POST'])
 def index():

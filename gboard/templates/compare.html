@@ -1,0 +1,20 @@
+{% from "macros.html" import inputField, submitForm %}
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+        <h1>Compare</h1>
+        <form class="form-group" id="comapre" action="{{ url_for('compare') }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="form-row">
+                {{ inputField(form.left_domain) }}
+                {{ inputField(form.right_domain) }}
+            <button class="btn btn-block btn-secondary" type="submit">Comapre</button>
+        </form>
+        {% if left_soa is defined %}
+        <p>Left SOA: {{ left_soa }}</p></br>
+        <p>Right SOA: {{ right_soa }}</p>
+        {% endif %}
+    </main>
+
+{% endblock %}

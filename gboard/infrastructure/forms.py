@@ -23,3 +23,8 @@ class DomainForm(ModelForm):
         model = Domain
     master = QuerySelectField(label='Master', allow_blank=False)
     servers = ModelFieldList(FormField(ServerForm))
+
+
+class DomainSelectForm(FlaskForm):
+    left_domain = QuerySelectField(label='Domain', allow_blank=False)
+    right_domain = QuerySelectField(label='Domain', allow_blank=False)
